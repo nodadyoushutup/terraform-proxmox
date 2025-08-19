@@ -2,7 +2,7 @@ variable "endpoint" {
   type        = string
   description = "Proxmox API endpoint, e.g. https://192.168.1.10:8006/"
   validation {
-    condition = can(regex("^https?://", var.endpoint))
+    condition     = can(regex("^https?://", var.endpoint))
     error_message = "endpoint must start with http:// or https://."
   }
 }
@@ -32,6 +32,19 @@ variable "ssh" {
     password = string
   })
   sensitive = true
+}
+
+variable "image" {
+  description = "Image download definitions"
+  type = list(object({
+    content_type        = string
+    datastore_id        = string
+    file_name           = string
+    node_name           = string
+    overwrite           = optional(bool, false)
+    overwrite_unmanaged = optional(bool, false)
+    url                 = string
+  }))
 }
 
 variable "cloud_init" {
