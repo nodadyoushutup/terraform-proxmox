@@ -34,14 +34,6 @@ variable "ssh" {
   sensitive = true
 }
 
-variable "gitconfig" {
-  description = "Git configuration used to render templates"
-  type = object({
-    name  = string
-    email = string
-  })
-}
-
 variable "image" {
   description = "Image download definitions"
   type = list(object({
@@ -83,7 +75,7 @@ variable "cloud_init" {
       packages        = optional(list(string))
       write_files = optional(list(object({
         encoding    = optional(string)
-        template    = string
+        content     = string
         owner       = optional(string)
         path        = string
         permissions = optional(string)
