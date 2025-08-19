@@ -1,7 +1,7 @@
 # IMAGE
 resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64" {
   content_type = "iso"
-  datastore_id = "local"
+  datastore_id = "eapp"
   file_name = "ndysu-jammy-cloud-image-amd64.img"
   node_name = "pve"
   overwrite = true
@@ -11,7 +11,7 @@ resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_am
 
 resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_amd64" {
   content_type = "iso"
-  datastore_id = "local"
+  datastore_id = "eapp"
   file_name = "ndysu-talos-cloud-image-amd64.img"
   node_name = "pve"
   overwrite = true
@@ -22,7 +22,7 @@ resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_am
 # CLOUD CONFIG
 resource "proxmox_virtual_environment_file" "monitoring_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -33,7 +33,7 @@ resource "proxmox_virtual_environment_file" "monitoring_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_cp_0_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -44,7 +44,7 @@ resource "proxmox_virtual_environment_file" "talos_cp_0_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_cp_1_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -55,7 +55,7 @@ resource "proxmox_virtual_environment_file" "talos_cp_1_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_cp_2_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -66,7 +66,7 @@ resource "proxmox_virtual_environment_file" "talos_cp_2_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_wk_0_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -77,7 +77,7 @@ resource "proxmox_virtual_environment_file" "talos_wk_0_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_wk_1_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -88,7 +88,7 @@ resource "proxmox_virtual_environment_file" "talos_wk_1_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_wk_2_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -99,7 +99,7 @@ resource "proxmox_virtual_environment_file" "talos_wk_2_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_wk_3_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -110,7 +110,7 @@ resource "proxmox_virtual_environment_file" "talos_wk_3_cloud_config" {
 
 resource "proxmox_virtual_environment_file" "talos_wk_4_cloud_config" {
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = "eapp"
   node_name = "pve"
   overwrite = true
   source_raw {
@@ -144,12 +144,12 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 50
-    file_id = "local:iso/ndysu-jammy-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -158,7 +158,7 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/monitoring_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/monitoring_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
@@ -187,12 +187,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -201,11 +201,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_cp_0_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_cp_0_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "controlplane"]
   vm_id = 1201
 }
 
@@ -230,12 +231,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -244,11 +245,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_cp_1_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_cp_1_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "controlplane"]
   vm_id = 1202
 }
 
@@ -273,12 +275,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -287,11 +289,12 @@ resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_cp_2_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_cp_2_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "controlplane"]
   vm_id = 1203
 }
 
@@ -316,12 +319,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -330,11 +333,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_wk_0_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_wk_0_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "worker"]
   vm_id = 1204
 }
 
@@ -359,12 +363,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -373,11 +377,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_wk_1_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_wk_1_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "worker"]
   vm_id = 1205
 }
 
@@ -402,12 +407,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -416,11 +421,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_wk_2_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_wk_2_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "worker"]
   vm_id = 1206
 }
 
@@ -445,12 +451,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -459,11 +465,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_wk_3_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_wk_3_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "worker"]
   vm_id = 1207
 }
 
@@ -488,12 +495,12 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
   }
   
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "virtualization"
     interface = "virtio0"
     iothread = true
     discard = "on"
     size = 20
-    file_id = "local:iso/ndysu-talos-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
     ip_config {
@@ -502,10 +509,11 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
         gateway = "192.168.1.1"
       }
     }
-    user_data_file_id = "local:snippets/talos_wk_4_cloud_config.yaml"
+    user_data_file_id = "eapp:snippets/talos_wk_4_cloud_config.yaml"
   }
   network_device {
     bridge = "vmbr0"
   }
+  tags = ["talos", "worker"]
   vm_id = 1208
 }
