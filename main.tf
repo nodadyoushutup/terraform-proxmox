@@ -134,7 +134,7 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -143,9 +143,6 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -180,7 +177,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -189,9 +186,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -226,7 +220,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -235,9 +229,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -272,7 +263,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -281,9 +272,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -318,7 +306,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -327,9 +315,6 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -364,7 +349,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -373,9 +358,6 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -410,7 +392,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -419,9 +401,6 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -456,7 +435,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -465,9 +444,6 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
@@ -502,7 +478,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
   agent {
     enabled = true
   }
-  bios = "ovmf"
+  bios = "seabios"
   cpu {
     cores = 2
     type = "host"
@@ -511,9 +487,6 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
     dedicated = 4096
   }
   
-  efi_disk {
-    datastore_id = "local-lvm"
-  }
   disk {
     datastore_id = "local-lvm"
     interface = "virtio0"
