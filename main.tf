@@ -11,7 +11,7 @@ resource "proxmox_virtual_environment_download_file" "image" {
 }
 
 resource "proxmox_virtual_environment_file" "user_cloud_config" {
-  for_each     = { for cloud_init in local.cloud_init : cloud_init.file_name => cloud_init }
+  for_each     = { for cloud_init in var.cloud_init : cloud_init.file_name => cloud_init }
   content_type = each.value.content_type
   datastore_id = each.value.datastore_id
   node_name    = each.value.node_name
@@ -73,5 +73,5 @@ resource "proxmox_virtual_environment_vm" "virtual_machine" {
 
 
 output "debug" {
-  value = yamlencode(local.cloud_init[0].config)
+  value = yamlencode(var.cloud_init[0].config)
 }
