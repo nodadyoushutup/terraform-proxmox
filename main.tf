@@ -152,6 +152,7 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
     file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.105/24"
@@ -195,6 +196,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.201/24"
@@ -239,6 +241,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.202/24"
@@ -283,6 +286,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.203/24"
@@ -327,6 +331,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.204/24"
@@ -371,6 +376,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.205/24"
@@ -415,6 +421,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.206/24"
@@ -459,6 +466,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.207/24"
@@ -503,6 +511,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
   }
   initialization {
+    datastore_id = "virtualization"
     ip_config {
       ipv4 {
         address = "192.168.1.208/24"
