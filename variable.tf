@@ -1,36 +1,21 @@
-variable "endpoint" {
-  type        = string
-  description = "Proxmox API endpoint, e.g. https://192.168.1.10:8006/"
-  validation {
-    condition     = can(regex("^https?://", var.endpoint))
-    error_message = "endpoint must start with http:// or https://."
-  }
-}
 
-variable "username" {
-  type        = string
-  description = "Proxmox API username (e.g., root@pam)."
-}
-
-variable "password" {
-  type        = string
-  description = "Proxmox API password."
-  sensitive   = true
-}
-
-variable "insecure" {
-  type        = bool
-  description = "Skip TLS verification for Proxmox API."
-  default     = false
-}
-
-variable "ssh" {
-  description = "SSH connection settings for the provider."
+variable "provider_config" {
+  description = "Proxmox provider configuration"
   type = object({
-    agent    = bool
+    endpoint = string
     username = string
     password = string
+    insecure = optional(bool, false)
+    ssh = object({
+      agent    = optional(bool, false)
+      username = string
+      password = string
+    })
   })
+  validation {
+    condition     = can(regex("^https?://", var.provider_config.endpoint))
+    error_message = "provider_config.endpoint must start with http:// or https://."
+  }
   sensitive = true
 }
 
