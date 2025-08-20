@@ -12,6 +12,14 @@
 .kube/
 .kube
 
+# ssh
+.ssh/
+.ssh
+
+# tfvars
+.tfvars/
+.tfvars
+
 # secret
 .secret/
 .secret
