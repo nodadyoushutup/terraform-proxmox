@@ -9,7 +9,8 @@
 *.terraform.lock.hcl
 
 # kubeconfig
-*.kubeconfig
+.kube/
+.kube
 
 # secret
 .secret/
