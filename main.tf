@@ -6,7 +6,7 @@ resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_am
   node_name = "pve"
   overwrite = true
   overwrite_unmanaged = true
-  url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.98.img"
+  url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.99.img"
 }
 
 resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_amd64" {
