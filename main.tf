@@ -266,96 +266,6 @@ resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
   vm_id = 1201
 }
 
-resource "proxmox_virtual_environment_vm" "talos_cp_1_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_cp_1_cloud_config,
-  ]
-
-  name = "talos-cp-1"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
-  
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.202/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_cp_1_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "controlplane"]
-  vm_id = 1202
-}
-
-resource "proxmox_virtual_environment_vm" "talos_cp_2_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_cp_2_cloud_config,
-  ]
-
-  name = "talos-cp-2"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
-  
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.203/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_cp_2_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "controlplane"]
-  vm_id = 1203
-}
-
 resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
   depends_on = [
     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
@@ -388,7 +298,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.204/24"
+        address = "192.168.1.202/24"
         gateway = "192.168.1.1"
       }
     }
@@ -398,7 +308,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
     bridge = "vmbr0"
   }
   tags = ["talos", "worker"]
-  vm_id = 1204
+  vm_id = 1202
 }
 
 resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
@@ -433,7 +343,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.205/24"
+        address = "192.168.1.203/24"
         gateway = "192.168.1.1"
       }
     }
@@ -443,7 +353,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
     bridge = "vmbr0"
   }
   tags = ["talos", "worker"]
-  vm_id = 1205
+  vm_id = 1203
 }
 
 resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
@@ -478,7 +388,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.206/24"
+        address = "192.168.1.204/24"
         gateway = "192.168.1.1"
       }
     }
@@ -488,7 +398,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
     bridge = "vmbr0"
   }
   tags = ["talos", "worker"]
-  vm_id = 1206
+  vm_id = 1204
 }
 
 resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
@@ -523,7 +433,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.207/24"
+        address = "192.168.1.205/24"
         gateway = "192.168.1.1"
       }
     }
@@ -533,7 +443,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
     bridge = "vmbr0"
   }
   tags = ["talos", "worker"]
-  vm_id = 1207
+  vm_id = 1205
 }
 
 resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
@@ -568,7 +478,7 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.208/24"
+        address = "192.168.1.206/24"
         gateway = "192.168.1.1"
       }
     }
@@ -578,5 +488,5 @@ resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
     bridge = "vmbr0"
   }
   tags = ["talos", "worker"]
-  vm_id = 1208
+  vm_id = 1206
 }
