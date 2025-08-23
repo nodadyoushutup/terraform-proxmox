@@ -30,6 +30,7 @@ resource "proxmox_virtual_environment_file" "database_cloud_config" {
     file_name = "database_cloud_config.yaml"
   }
 }
+
 resource "proxmox_virtual_environment_file" "monitoring_cloud_config" {
   content_type = "snippets"
   datastore_id = "eapp"
@@ -40,6 +41,18 @@ resource "proxmox_virtual_environment_file" "monitoring_cloud_config" {
     file_name = "monitoring_cloud_config.yaml"
   }
 }
+
+resource "proxmox_virtual_environment_file" "cicd_cloud_config" {
+  content_type = "snippets"
+  datastore_id = "eapp"
+  node_name = "pve"
+  overwrite = true
+  source_raw {
+    data = "#cloud-config\n${yamlencode(local.cloud_init.cicd)}"
+    file_name = "cicd_cloud_config.yaml"
+  }
+}
+
 
 resource "proxmox_virtual_environment_file" "talos_cp_0_cloud_config" {
   content_type = "snippets"
@@ -220,6 +233,52 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
   }
   vm_id = 1103
 }
+
+resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
+  depends_on = [
+    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
+    proxmox_virtual_environment_file.cicd_cloud_config,
+  ]
+
+  name = "cicd"
+  node_name = "pve"
+  agent {
+    enabled = true
+  }
+  bios = "seabios"
+  cpu {
+    cores = 2
+    type = "host"
+  }
+  memory {
+    dedicated = 4096
+  }
+  
+  disk {
+    datastore_id = "virtualization"
+    interface = "virtio0"
+    iothread = true
+    discard = "on"
+    size = 100
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
+  }
+  initialization {
+    datastore_id = "virtualization"
+    ip_config {
+      ipv4 {
+        address = "192.168.1.110/24"
+        gateway = "192.168.1.1"
+      }
+    }
+    user_data_file_id = "eapp:snippets/cicd_cloud_config.yaml"
+  }
+  network_device {
+    bridge = "vmbr0"
+  }
+  tags = ["cicd", "jenkins"]
+  vm_id = 1110
+}
+
 
 resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
   depends_on = [
