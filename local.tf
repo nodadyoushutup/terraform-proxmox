@@ -102,9 +102,10 @@ locals {
             timezone = "America/New_York"
             mounts = [
                 ["192.168.1.100:/mnt/epool/media", "/mnt/epool/media", "nfs", "defaults,_netdev", "0", "0"],
-                ["192.168.1.100:/mnt/eapp/home/.ssh", "/home/nodadyoushutup/.ssh", "nfs", "defaults,_netdev", "0", "0"],
-                ["192.168.1.100:/mnt/eapp/home/.kube", "/home/nodadyoushutup/.kube", "nfs", "defaults,_netdev", "0", "0"],
-                ["192.168.1.100:/mnt/eapp/home/.tfvars", "/home/nodadyoushutup/.tfvars", "nfs", "defaults,_netdev", "0", "0"]
+                ["192.168.1.100:/mnt/eapp/home/.ssh", "/mnt/eapp/.ssh", "nfs", "defaults,_netdev", "0", "0"],
+                ["192.168.1.100:/mnt/eapp/home/.kube", "/mnt/eapp/.kube", "nfs", "defaults,_netdev", "0", "0"],
+                ["192.168.1.100:/mnt/eapp/home/.tfvars", "/mnt/eapp/.tfvars", "nfs", "defaults,_netdev", "0", "0"],
+                ["192.168.1.100:/mnt/eapp/home/code", "/mnt/eapp/code", "nfs", "defaults,_netdev", "0", "0"]
             ]
             groups = [
                 "docker"
@@ -117,6 +118,8 @@ locals {
                     name = "nodadyoushutup"
                     groups = ["sudo", "docker"]
                     shell = "/bin/bash"
+                    uid = 1000
+                    gid = 1000
                     sudo = "ALL=(ALL) NOPASSWD:ALL"
                     lock_passwd = false
                     ssh_import_id = [
@@ -138,10 +141,12 @@ locals {
                 }
             ]
             bootcmd = [
-                "mkdir -p /mnt/epool/media",
-                "mkdir -p /etc/skel/.ssh",
-                "mkdir -p /etc/skel/.kube",
-                "mkdir -p /etc/skel/.tfvars",
+                "rm -rf /etc/skel/.ssh",
+                "ln -s /mnt/eapp/.ssh /etc/skel/.ssh",
+                "ln -s /mnt/eapp/.kube /etc/skel/.kube",
+                "ln -s /mnt/eapp/.tfvars /etc/skel/.tfvars",
+                "ln -s /mnt/eapp/code /etc/skel/code",
+                "ln -s /mnt/epool/media /etc/skel/media"
             ]
             runcmd = [
                 "echo 'done' > /tmp/cloud-config.done"

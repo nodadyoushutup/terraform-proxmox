@@ -9,6 +9,16 @@ resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_am
   url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.99.img"
 }
 
+resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64_0_1_100" {
+  content_type = "iso"
+  datastore_id = "eapp"
+  file_name = "ndysu-jammy-cloud-image-amd64-0.1.100.img"
+  node_name = "pve"
+  overwrite = true
+  overwrite_unmanaged = true
+  url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.100.img"
+}
+
 resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_amd64" {
   content_type = "iso"
   datastore_id = "eapp"
@@ -236,7 +246,7 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
 
 resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
   depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
+    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_100,
     proxmox_virtual_environment_file.cicd_cloud_config,
   ]
 
@@ -260,7 +270,7 @@ resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
     iothread = true
     discard = "on"
     size = 100
-    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.100.img"
   }
   initialization {
     datastore_id = "virtualization"
