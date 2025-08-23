@@ -1,8 +1,8 @@
 # IMAGE
-resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64" {
+resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64_0_1_99" {
   content_type = "iso"
   datastore_id = "eapp"
-  file_name = "ndysu-jammy-cloud-image-amd64.img"
+  file_name = "ndysu-jammy-cloud-image-amd64-0.1.99.img"
   node_name = "pve"
   overwrite = true
   overwrite_unmanaged = true
@@ -20,6 +20,16 @@ resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_am
 }
 
 # CLOUD CONFIG
+resource "proxmox_virtual_environment_file" "database_cloud_config" {
+  content_type = "snippets"
+  datastore_id = "eapp"
+  node_name = "pve"
+  overwrite = true
+  source_raw {
+    data = "#cloud-config\n${yamlencode(local.cloud_init.database)}"
+    file_name = "database_cloud_config.yaml"
+  }
+}
 resource "proxmox_virtual_environment_file" "monitoring_cloud_config" {
   content_type = "snippets"
   datastore_id = "eapp"
@@ -123,9 +133,53 @@ resource "proxmox_virtual_environment_file" "talos_wk_4_cloud_config" {
 
 
 # VIRTUAL MACHINE
+resource "proxmox_virtual_environment_vm" "database_virtual_machine" {
+  depends_on = [
+    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
+    proxmox_virtual_environment_file.database_cloud_config,
+  ]
+
+  name = "database"
+  node_name = "pve"
+  agent {
+    enabled = true
+  }
+  bios = "seabios"
+  cpu {
+    cores = 2
+    type = "host"
+  }
+  memory {
+    dedicated = 4096
+  }
+  
+  disk {
+    datastore_id = "virtualization"
+    interface = "virtio0"
+    iothread = true
+    discard = "on"
+    size = 50
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
+  }
+  initialization {
+    datastore_id = "virtualization"
+    ip_config {
+      ipv4 {
+        address = "192.168.1.102/24"
+        gateway = "192.168.1.1"
+      }
+    }
+    user_data_file_id = "eapp:snippets/database_cloud_config.yaml"
+  }
+  network_device {
+    bridge = "vmbr0"
+  }
+  vm_id = 1102
+}
+
 resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
   depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64,
+    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
     proxmox_virtual_environment_file.monitoring_cloud_config,
   ]
 
@@ -149,13 +203,13 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
     iothread = true
     discard = "on"
     size = 50
-    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64.img"
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
   }
   initialization {
     datastore_id = "virtualization"
     ip_config {
       ipv4 {
-        address = "192.168.1.105/24"
+        address = "192.168.1.103/24"
         gateway = "192.168.1.1"
       }
     }
@@ -164,7 +218,7 @@ resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
   network_device {
     bridge = "vmbr0"
   }
-  vm_id = 1105
+  vm_id = 1103
 }
 
 resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {

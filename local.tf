@@ -9,6 +9,50 @@ locals {
         }
     }
     cloud_init = {
+        database = {   
+            hostname = "database"
+            timezone = "America/New_York"
+            mounts = [
+                ["192.168.1.100:/mnt/epool/media", "/mnt/epool/media", "nfs", "defaults,_netdev", "0", "0"]
+            ]
+            groups = [
+                "docker"
+            ]
+            users = [
+                {
+                    name = "default"
+                },
+                {
+                    name = "nodadyoushutup"
+                    groups = ["sudo", "docker"]
+                    shell = "/bin/bash"
+                    sudo = "ALL=(ALL) NOPASSWD:ALL"
+                    lock_passwd = false
+                    ssh_import_id = [
+                        "gh:nodadyoushutup"
+                    ]
+                    ssh_authorized_keys = []
+                }
+            ]
+            package_update = true
+            package_upgrade = false
+            packages = []
+            write_files = [
+                {
+                    encoding = "b64"
+                    content = base64encode(local.template.gitconfig)
+                    owner = "root:root"
+                    path = "/etc/skel/.gitconfig"
+                    permissions = "0644"
+                }
+            ]
+            bootcmd = [
+                "mkdir -p /mnt/epool/media"
+            ]
+            runcmd = [
+                "echo 'done' > /tmp/cloud-config.done"
+            ]
+        }
         monitoring = {   
             hostname = "monitoring"
             timezone = "America/New_York"
