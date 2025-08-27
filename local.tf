@@ -106,8 +106,8 @@ locals {
                 ["192.168.1.100:/mnt/eapp/skel/.ssh", "/mnt/eapp/skel/.ssh", "nfs", "defaults,_netdev", "0", "0"],
                 ["192.168.1.100:/mnt/eapp/skel/.kube", "/mnt/eapp/skel/.kube", "nfs", "defaults,_netdev", "0", "0"],
                 ["192.168.1.100:/mnt/eapp/skel/.tfvars", "/mnt/eapp/skel/.tfvars", "nfs", "defaults,_netdev", "0", "0"],
-                ["192.168.1.100:/mnt/eapp/skel/.tfvars", "/mnt/eapp/skel/.tfvars", "nfs", "defaults,_netdev", "0", "0"],
                 ["192.168.1.100:/mnt/eapp/skel/.home", "/mnt/eapp/skel/.home", "nfs", "defaults,_netdev", "0", "0"],
+                ["192.168.1.100:/mnt/eapp/skel/.jenkins", "/mnt/eapp/skel/.jenkins", "nfs", "defaults,_netdev", "0", "0"],
             ]
             groups = [
                 "docker"
@@ -125,12 +125,8 @@ locals {
                     sudo = "ALL=(ALL) NOPASSWD:ALL"
                     plain_text_passwd = "password"
                     lock_passwd = false
-                    ssh_import_id = [
-                        "gh:nodadyoushutup"
-                    ]
-                    ssh_authorized_keys = [
-                        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCq6CJR8FeZ3C73GgeK0oZntTb5ufosNfyO5qooiUYNsNlnaniGSXN6g9iLEx0ctzU+TpJ3tMiBuPi1T+jr03EcSgm7gedPSufNidjCeEy2XadCBWamIYub0kdPeC1xWVBjTS46wIf17Nyc6OvingxpiR7NbdytvjaHm3nY77HPJWgGr/g6JoCinryLRSjVNV/OtWQIFWvu3I0NBs1aATfF/lT8bJBPcxJOTOFoc5zfOqaY/5KYdWQ5pUoIY0T3EDm6qkh2VW1e1eP/jdJIizLDU/zFLYE8GCyLwrH02gkzVs3Ve0gLz3R08ETH7Y1MuEq6nRz5TieRAmMXeUwVo+RP9i1Am3oWF498N3gQTthl/eEMn0DpOglO45/VwYivIsB77bpQj9JF4ALH3CqwzKfFqAsHFop+b4A27wNLyWe1BRhFhe4q2C60qW9iTfxR54nPl7mNKvtBP3zxXu0nMc2SdBlGfpcmSMit8f0R7j/3+snpu/Wsfo7bDhH+dYP7/c= nodadyoushutup@universal"
-                    ]
+                    ssh_import_id = []
+                    ssh_authorized_keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDDv17Wmq4Haegs0uvWNs+WdXhTXfrQiju/Y/+kC9mO70RPE3RH7VQ+swqIJmgfHPGX493OXUIfVoDOAuAq7LW5BAGdRggKpaQLowymUgN9oogLOCUcmZQTr3QuZdv+1A2dAqtDV6acus6tIWXsWfTQZYW3wn2JdeHIT0CmMg8YVWVuK4mMFwcEpwxVtHzEN7YYMHQcJ2rQElmlAcDPBJAM/F0wVinnzrEVwEcRbT9IrAV+6n0ef/N3wW6k/Qz89jd1znbjG8YBdmqlpApEdgWO8IpkifN2vmSb3Puu57v8DdUySeubVpFOXFfA1vjvdcVRDNXkjQ78EOYlnDFoUkiy0LpDwDFIAlps3ZX1R4m28xwdkasy8ZFqhEZ2xqh1raYlZmFXsH76GscbNsVovEKoQOg60jiotRqbCa+eh0iPEo+HYp7qETwLE41Ko+SWHpMHUMWa5asmwH9L3lOsCzUM+Y9icULct65BS0tYiKBvx4phANWleZQgG0QC8UJ5pZs= jacob@Desktop"]
                 }
             ]
             package_update = true
@@ -138,15 +134,18 @@ locals {
             packages = []
             write_files = []
             bootcmd = [
-                "rm -rf /etc/skel/.ssh",
-                "ln -s /mnt/eapp/code /etc/skel/code",
-                "ln -s /mnt/epool/media /etc/skel/media",
-                "ln -s /mnt/eapp/skel/.ssh /etc/skel/.ssh",
-                "ln -s /mnt/eapp/skel/.kube /etc/skel/.kube",
                 "ln -s /mnt/eapp/skel/.tfvars /etc/skel/.tfvars",
+                "ln -s /mnt/eapp/skel/.kube /etc/skel/.kube",
+                "ln -s /mnt/eapp/skel/.jenkins /etc/skel/.jenkins",
                 "ln -s /mnt/eapp/skel/.home/.gitconfig /etc/skel/.gitconfig",
+                "ln -s /mnt/eapp/code /etc/skel/code",
+                "ln -s /mnt/eapp/media /etc/skel/media",
             ]
             runcmd = [
+                "cp -a /mnt/eapp/skel/.ssh/id_rsa /home/nodadyoushutup/.ssh/id_rsa",
+                "cp -a /mnt/eapp/skel/.ssh/id_rsa.pub /home/nodadyoushutup/.ssh/id_rsa.pub",
+                "cp -a /mnt/eapp/skel/.ssh/authorized_keys /home/nodadyoushutup/.ssh/authorized_keys",
+                "cp -a /mnt/eapp/skel/.ssh/config /home/nodadyoushutup/.ssh/config",
                 "echo 'done' > /tmp/cloud-config.done"
             ]
         }
