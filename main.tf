@@ -1,22 +1,12 @@
 # IMAGE
-resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64_0_1_99" {
+resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64_0_1_101" {
   content_type = "iso"
   datastore_id = "eapp"
-  file_name = "ndysu-jammy-cloud-image-amd64-0.1.99.img"
+  file_name = "ndysu-jammy-cloud-image-amd64-0.1.101.img"
   node_name = "pve"
   overwrite = true
   overwrite_unmanaged = true
-  url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.99.img"
-}
-
-resource "proxmox_virtual_environment_download_file" "ndysu_jammy_cloud_image_amd64_0_1_100" {
-  content_type = "iso"
-  datastore_id = "eapp"
-  file_name = "ndysu-jammy-cloud-image-amd64-0.1.100.img"
-  node_name = "pve"
-  overwrite = true
-  overwrite_unmanaged = true
-  url = "https://cir.nodadyoushutup.com/public/jammy-cloud-image-amd64-0.1.100.img"
+  url = "http://192.168.1.150:3918/public/jammy-cloud-image-amd64-0.1.101.img"
 }
 
 resource "proxmox_virtual_environment_download_file" "ndysu_talos_cloud_image_amd64" {
@@ -63,7 +53,6 @@ resource "proxmox_virtual_environment_file" "cicd_cloud_config" {
   }
 }
 
-
 resource "proxmox_virtual_environment_file" "talos_cp_0_cloud_config" {
   content_type = "snippets"
   datastore_id = "eapp"
@@ -72,28 +61,6 @@ resource "proxmox_virtual_environment_file" "talos_cp_0_cloud_config" {
   source_raw {
     data = "#cloud-config\n${yamlencode(local.cloud_init.talos_cp_0)}"
     file_name = "talos_cp_0_cloud_config.yaml"
-  }
-}
-
-resource "proxmox_virtual_environment_file" "talos_cp_1_cloud_config" {
-  content_type = "snippets"
-  datastore_id = "eapp"
-  node_name = "pve"
-  overwrite = true
-  source_raw {
-    data = "#cloud-config\n${yamlencode(local.cloud_init.talos_cp_1)}"
-    file_name = "talos_cp_1_cloud_config.yaml"
-  }
-}
-
-resource "proxmox_virtual_environment_file" "talos_cp_2_cloud_config" {
-  content_type = "snippets"
-  datastore_id = "eapp"
-  node_name = "pve"
-  overwrite = true
-  source_raw {
-    data = "#cloud-config\n${yamlencode(local.cloud_init.talos_cp_2)}"
-    file_name = "talos_cp_2_cloud_config.yaml"
   }
 }
 
@@ -152,101 +119,10 @@ resource "proxmox_virtual_environment_file" "talos_wk_4_cloud_config" {
   }
 }
 
-
-
-
 # VIRTUAL MACHINE
-resource "proxmox_virtual_environment_vm" "database_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
-    proxmox_virtual_environment_file.database_cloud_config,
-  ]
-
-  name = "database"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
-  
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 50
-    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.102/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/database_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  vm_id = 1102
-}
-
-resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_99,
-    proxmox_virtual_environment_file.monitoring_cloud_config,
-  ]
-
-  name = "monitoring"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
-  
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 50
-    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.99.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.103/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/monitoring_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  vm_id = 1103
-}
-
 resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
   depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_100,
+    proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_101,
     proxmox_virtual_environment_file.cicd_cloud_config,
   ]
 
@@ -270,7 +146,7 @@ resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
     iothread = true
     discard = "on"
     size = 100
-    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.100.img"
+    file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.101.img"
   }
   initialization {
     datastore_id = "virtualization"
@@ -289,273 +165,360 @@ resource "proxmox_virtual_environment_vm" "cicd_virtual_machine" {
   vm_id = 1110
 }
 
+# resource "proxmox_virtual_environment_vm" "database_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_101,
+#     proxmox_virtual_environment_file.database_cloud_config,
+#   ]
 
-resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_cp_0_cloud_config,
-  ]
-
-  name = "talos-cp-0"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "database"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.201/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_cp_0_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "controlplane"]
-  vm_id = 1201
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 50
+#     file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.100.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.102/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/database_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   vm_id = 1102
+# }
 
-resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_wk_0_cloud_config,
-  ]
+# resource "proxmox_virtual_environment_vm" "monitoring_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_jammy_cloud_image_amd64_0_1_101,
+#     proxmox_virtual_environment_file.monitoring_cloud_config,
+#   ]
 
-  name = "talos-wk-0"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "monitoring"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.202/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_wk_0_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "worker"]
-  vm_id = 1202
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 50
+#     file_id = "eapp:iso/ndysu-jammy-cloud-image-amd64-0.1.100.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.103/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/monitoring_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   vm_id = 1103
+# }
 
-resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_wk_1_cloud_config,
-  ]
+# resource "proxmox_virtual_environment_vm" "talos_cp_0_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_cp_0_cloud_config,
+#   ]
 
-  name = "talos-wk-1"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "talos-cp-0"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.203/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_wk_1_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "worker"]
-  vm_id = 1203
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.201/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_cp_0_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "controlplane"]
+#   vm_id = 1201
+# }
 
-resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_wk_2_cloud_config,
-  ]
+# resource "proxmox_virtual_environment_vm" "talos_wk_0_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_wk_0_cloud_config,
+#   ]
 
-  name = "talos-wk-2"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "talos-wk-0"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.204/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_wk_2_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "worker"]
-  vm_id = 1204
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.202/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_wk_0_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "worker"]
+#   vm_id = 1202
+# }
 
-resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_wk_3_cloud_config,
-  ]
+# resource "proxmox_virtual_environment_vm" "talos_wk_1_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_wk_1_cloud_config,
+#   ]
 
-  name = "talos-wk-3"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "talos-wk-1"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.205/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_wk_3_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "worker"]
-  vm_id = 1205
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.203/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_wk_1_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "worker"]
+#   vm_id = 1203
+# }
 
-resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
-  depends_on = [
-    proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
-    proxmox_virtual_environment_file.talos_wk_4_cloud_config,
-  ]
+# resource "proxmox_virtual_environment_vm" "talos_wk_2_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_wk_2_cloud_config,
+#   ]
 
-  name = "talos-wk-4"
-  node_name = "pve"
-  agent {
-    enabled = true
-  }
-  bios = "seabios"
-  cpu {
-    cores = 2
-    type = "host"
-  }
-  memory {
-    dedicated = 4096
-  }
+#   name = "talos-wk-2"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
   
-  disk {
-    datastore_id = "virtualization"
-    interface = "virtio0"
-    iothread = true
-    discard = "on"
-    size = 20
-    file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
-  }
-  initialization {
-    datastore_id = "virtualization"
-    ip_config {
-      ipv4 {
-        address = "192.168.1.206/24"
-        gateway = "192.168.1.1"
-      }
-    }
-    user_data_file_id = "eapp:snippets/talos_wk_4_cloud_config.yaml"
-  }
-  network_device {
-    bridge = "vmbr0"
-  }
-  tags = ["talos", "worker"]
-  vm_id = 1206
-}
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.204/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_wk_2_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "worker"]
+#   vm_id = 1204
+# }
+
+# resource "proxmox_virtual_environment_vm" "talos_wk_3_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_wk_3_cloud_config,
+#   ]
+
+#   name = "talos-wk-3"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
+  
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.205/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_wk_3_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "worker"]
+#   vm_id = 1205
+# }
+
+# resource "proxmox_virtual_environment_vm" "talos_wk_4_virtual_machine" {
+#   depends_on = [
+#     proxmox_virtual_environment_download_file.ndysu_talos_cloud_image_amd64,
+#     proxmox_virtual_environment_file.talos_wk_4_cloud_config,
+#   ]
+
+#   name = "talos-wk-4"
+#   node_name = "pve"
+#   agent {
+#     enabled = true
+#   }
+#   bios = "seabios"
+#   cpu {
+#     cores = 2
+#     type = "host"
+#   }
+#   memory {
+#     dedicated = 4096
+#   }
+  
+#   disk {
+#     datastore_id = "virtualization"
+#     interface = "virtio0"
+#     iothread = true
+#     discard = "on"
+#     size = 20
+#     file_id = "eapp:iso/ndysu-talos-cloud-image-amd64.img"
+#   }
+#   initialization {
+#     datastore_id = "virtualization"
+#     ip_config {
+#       ipv4 {
+#         address = "192.168.1.206/24"
+#         gateway = "192.168.1.1"
+#       }
+#     }
+#     user_data_file_id = "eapp:snippets/talos_wk_4_cloud_config.yaml"
+#   }
+#   network_device {
+#     bridge = "vmbr0"
+#   }
+#   tags = ["talos", "worker"]
+#   vm_id = 1206
+# }
