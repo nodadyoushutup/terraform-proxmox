@@ -142,6 +142,7 @@ locals {
                 "ln -s /mnt/eapp/media /etc/skel/media",
             ]
             runcmd = [
+                "docker swarm init",
                 "cp -a /mnt/eapp/skel/.ssh/id_rsa /home/nodadyoushutup/.ssh/id_rsa",
                 "cp -a /mnt/eapp/skel/.ssh/id_rsa.pub /home/nodadyoushutup/.ssh/id_rsa.pub",
                 "cp -a /mnt/eapp/skel/.ssh/authorized_keys /home/nodadyoushutup/.ssh/authorized_keys",
